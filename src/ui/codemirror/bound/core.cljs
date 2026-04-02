@@ -2,7 +2,6 @@
   (:require
    [taoensso.timbre :refer-macros [debug debugf info infof warn error]]
    [reagent.core :as r]
-   [reagent.dom :as rd]
    ["codemirror" :as CodeMirror]
    ["codemirror/addon/edit/closebrackets"]
    ["codemirror/addon/edit/matchbrackets"]
@@ -37,12 +36,12 @@
 
 (defn focus-active [id {:keys [active? view-only] :as cm-opts} cm]
   (when (and active? (not view-only))
-    (debugf "focusing cm %s .." id  "active:" active? "view-only: " view-only)
+    (debugf "focusing cm %s .." id "active:" active? "view-only: " view-only)
     (focus-cm! cm)))
 
 (defn blur-inactive [id {:keys [active? view-only] :as cm-opts} cm]
   (when (or (not active?) view-only)
-    (debugf "blurring cm %s" id  "active:" active? "view-only: " view-only)
+    (debugf "blurring cm %s" id "active:" active? "view-only: " view-only)
     (blur-cm! cm)))
 
 (defn create-editor [id el opts-js]
@@ -63,11 +62,12 @@
 (defn codemirror-reagent
   "code-mirror editor"
   [id {:keys [get-data] :as fun} cm-opts]
-  (let [opts  (merge
-               cm-default-opts
-               cm-opts
-               {:readOnly (:view-only cm-opts)})
+  (let [opts (merge
+              cm-default-opts
+              cm-opts
+              {:readOnly (:view-only cm-opts)})
         ;_ (warn "opts: " opts)
+        textarea-el (atom nil)
         make-event-handler (fn [f]
                              (fn [s evt]
                                ;(info "cm event - evt: " evt " cm:" s)
@@ -78,26 +78,26 @@
     (r/create-class
      {:component-did-mount
       (fn [this]
-        (let [el (rd/dom-node this)
-              opts-js (clj->js opts)
-              ;_ (info "component-did-mount: cm")
-              cm_ (create-editor id el opts-js)
-              code (get-data id)]
-          (.setValue cm_ code)
+        (when-let [el @textarea-el]
+          (let [opts-js (clj->js opts)
+                ;_ (info "component-did-mount: cm")
+                cm_ (create-editor id el opts-js)
+                code (get-data id)]
+            (.setValue cm_ code)
 
-          ; theme - already set in cm constructor
-          ;(.setOption inst "theme" (:theme opts))
+            ; theme - already set in cm constructor
+            ;(.setOption inst "theme" (:theme opts))
 
-          (.on cm_ "change" (make-event-handler on-change))
-          (.on cm_ "keydown"  (make-event-handler on-key-down))
-          (.on cm_ "keyup"   (make-event-handler on-key-up))
-          (.on cm_ "mousedown" (make-event-handler on-mousedown))
+            (.on cm_ "change" (make-event-handler on-change))
+            (.on cm_ "keydown" (make-event-handler on-key-down))
+            (.on cm_ "keyup" (make-event-handler on-key-up))
+            (.on cm_ "mousedown" (make-event-handler on-mousedown))
 
-          (blur-inactive id opts cm_)
-          (focus-active id opts cm_)
+            (blur-inactive id opts cm_)
+            (focus-active id opts cm_)
 
-          ;(when on-cm-init (on-cm-init inst))
-          ))
+            ;(when on-cm-init (on-cm-init inst))
+            )))
 
       :component-will-unmount
       (fn [this]
@@ -119,8 +119,9 @@
       (fn []
         (let [{:keys [readOnly]} opts]
           (if readOnly
-            [:textarea {:read-only true}]
-            [:textarea])))})))
+            [:textarea {:read-only true
+                        :ref #(reset! textarea-el %)}]
+            [:textarea {:ref #(reset! textarea-el %)}])))})))
 
 
 

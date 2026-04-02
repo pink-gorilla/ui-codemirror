@@ -2,7 +2,6 @@
   (:require
    [taoensso.timbre :refer-macros [debug debugf info infof warn error]]
    [reagent.core :as r]
-   [reagent.dom :as rd]
    ["codemirror" :as CodeMirror]
    ["codemirror/addon/edit/closebrackets"]
    ["codemirror/addon/edit/matchbrackets"]
@@ -19,14 +18,13 @@
    [ui.codemirror.highlight]
    [ui.codemirror.options :refer [cm-default-opts ensure-initialized]]
    ;[ui.codemirror.theme]
- ))
+   ))
 
 (defonce active-editor-atom
   (r/atom {}))
 
 (defn get-editor [id]
   (get @active-editor-atom id))
-
 
 (defn- create-editor [id el opts-js]
   (info "creating codemirror-js id: " id)
@@ -46,17 +44,18 @@
 (defn codemirror
   [id cm-opts]
   (let [cm-opts (or cm-opts {})
-        opts  (merge
-               cm-default-opts
-               cm-opts)
+        opts (merge
+              cm-default-opts
+              cm-opts)
+        textarea-el (atom nil)
         ;_ (warn "opts: " opts)
         ]
     (r/create-class
      {:component-did-mount
       (fn [this]
-        (let [el (rd/dom-node this)
-              opts-js (clj->js opts)]
-          (create-editor id el opts-js)))
+        (when-let [el @textarea-el]
+          (let [opts-js (clj->js opts)]
+            (create-editor id el opts-js))))
 
       :component-will-unmount
       (fn [this]
@@ -80,8 +79,9 @@
       (fn []
         (let [{:keys [readOnly]} opts]
           (if readOnly
-            [:textarea {:read-only true}]
-            [:textarea])))})))
+            [:textarea {:read-only true
+                        :ref #(reset! textarea-el %)}]
+            [:textarea {:ref #(reset! textarea-el %)}])))})))
 
 
 

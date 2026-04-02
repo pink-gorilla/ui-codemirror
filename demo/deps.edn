@@ -4,7 +4,7 @@
          ]
  :deps
  {org.pinkgorilla/ui-codemirror {:local/root ".." :deps/manifest :deps}
-  org.pinkgorilla/ui-repl {:mvn/version "0.0.43"} ; reagent
+  ;org.pinkgorilla/ui-repl {:mvn/version "0.0.43"} ; reagent
   org.pinkgorilla/ui-dialog-keybindings {:mvn/version "0.1.6"}
   org.pinkgorilla/webly {:mvn/version "0.5.660"}}
 
