@@ -88,5 +88,6 @@
                                   "lucario" ["codemirror/theme/lucario.css"]
                                   "material" ["codemirror/theme/material.css"]
                                   "idea" ["codemirror/theme/idea.css"]}}
-         :current {:codemirror "mdn-like" ; "paraiso-dark"
+         :current {:codemirror "neat" ; "paraiso-dark"
+                   ; mdn-like has a weird background grid.
                    }}}

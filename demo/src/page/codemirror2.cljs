@@ -1,7 +1,9 @@
 (ns page.codemirror2
   (:require
    [reagent.core :as r]
-   [ui.codemirror.bound :as cm]))
+   [ui.codemirror.bound :as cm]
+   [ui.codemirror.theme :as theme]
+   ))
 
 (defonce state2
   (r/atom {:editor {:src "[:p 123]"
@@ -17,6 +19,7 @@
    [:p "is a map"]
    [:p "eval button click will just print the code to browser console."]
    [:button.border.border-round.m-1 {:on-click eval2} "eval"]
+   [theme/style-codemirror-inline]
    [cm/codemirror-atom 0 state2 [:editor :src]]
    [cm/codemirror-atom-viewonly 1 state2 [:editor :src]]])
 
