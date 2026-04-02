@@ -1,7 +1,7 @@
 (ns demo.app
   (:require
    [reitit.frontend.easy :as rfe]
-   [frontend.css :refer [css-loader set-theme-component]]
+   [frontend.css :refer [css-loader set-theme-component theme-a]]
    [shadowx.core :refer [get-resource-path]]))
 
 (defn create-link [page & opts]
@@ -22,18 +22,30 @@
 (defn set-theme [theme]
   (set-theme-component :codemirror theme))
 
-(defn menu []
-  [:div.bg-blue-300.p-5.w-screen.h-screen
-   
-   [:div 
-    [link ['page.codemirror1/codemirror-unbound-page] "codemirror1"]
-    [link ['page.codemirror2/codemirror-demo-page2] "codemirror2"]
-    [link ['page.codemirror3/codemirror-demo-page3] "codemirror3"]]
-   [:br]
+(defn codemirror-theme-names [theme-state]
+  (->> (get-in theme-state [:available :codemirror])
+       keys
+       (filter string?)
+       sort))
 
-   [:button.border.border-round.p-1.bg-green-500 {:on-click #(set-theme "dracula")} "theme-dracula"]
-   [:button.border.border-round.p-1.bg-green-500 {:on-click #(set-theme "elegant")} "theme-elegant"]
-   [:button.border.border-round.p-1.bg-green-500 {:on-click #(set-theme "monokai")} "theme-monokai"]])
+(defn menu []
+  (let [theme-state @theme-a
+        themes (codemirror-theme-names theme-state)
+        current (get-in theme-state [:current :codemirror])]
+    [:div.bg-blue-300.p-5.w-screen.h-screen
+
+     [:div
+      [link ['page.codemirror1/codemirror-unbound-page] "codemirror1"]
+      [link ['page.codemirror2/codemirror-demo-page2] "codemirror2"]
+      [link ['page.codemirror3/codemirror-demo-page3] "codemirror3"]]
+     [:br]
+
+     [:label.mr-2 "CodeMirror theme"]
+     [:select.border.border-round.p-1.bg-white
+      {:value (str current)
+       :on-change #(set-theme (-> % .-target .-value))}
+      (for [t themes]
+        [:option {:key t :value t} t])]]))
 
 (defn wrap [page match]
   [:div
