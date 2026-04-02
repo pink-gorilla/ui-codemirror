@@ -1,15 +1,17 @@
-{:name "demo"
- :lazy true
- :depends-on #{:ui-codemirror}
- :cljs-namespace [page.codemirror1
+{:extension/name :codemirror-app
+ ; cljs-build
+ :cljs/module :codemirror-app
+ :cljs/depends-on #{:ui-codemirror :main}
+ :cljs/namespace [demo.app
+                  page.codemirror1
                   page.codemirror2
                   page.codemirror3]
- :cljs-ns-bindings {'page.codemirror1 {'codemirror-unbound-page page.codemirror1/codemirror-unbound-page}
+ :cljs/ns-bindings {'demo.app {'routes demo.app/routes
+                               'wrap demo.app/wrap} 
+                    'page.codemirror1 {'codemirror-unbound-page page.codemirror1/codemirror-unbound-page}
                     'page.codemirror2 {'codemirror-demo-page2 page.codemirror2/codemirror-demo-page2}
                     'page.codemirror3 {'codemirror-demo-page3 page.codemirror3/codemirror-demo-page3}}
  ; runtime
- :cljs-routes {""  page.codemirror1/codemirror-unbound-page
-               "2" page.codemirror2/codemirror-demo-page2
-               "3" page.codemirror3/codemirror-demo-page3}
+ :cljs-routes-reitit demo.app/routes
  ;
-}
+ }

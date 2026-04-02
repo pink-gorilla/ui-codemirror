@@ -3,27 +3,20 @@
          "node_modules" ; css from npm
          ]
  :deps
- {org.pinkgorilla/ui-codemirror {:local/root ".." :deps/manifest :deps}
-  ;org.pinkgorilla/ui-repl {:mvn/version "0.0.43"} ; reagent
+ {org.pinkgorilla/webly {:mvn/version "0.20.738"}
+  org.pinkgorilla/ui-router {:mvn/version "0.3.46"}
   org.pinkgorilla/ui-dialog-keybindings {:mvn/version "0.1.6"}
-  org.pinkgorilla/webly {:mvn/version "0.5.660"}}
+  org.pinkgorilla/ui-codemirror {:local/root ".." :deps/manifest :deps}}
 
  :aliases
- {; demo ui
-  :webly {:exec-fn webly.app.app/webly-build
-          :exec-args {:config ["demo-config.edn"]
-                      :profile "npm-install"}}
+ {:npm-install {:exec-fn webly.spa/webly-build
+                :exec-args {:profile "npm-install"}}
 
-  :npm-install {:exec-args {:profile "npm-install"}}
-  :compile {:exec-args {:profile "compile2"}}
-  :release {:exec-args {:profile "release"}}
-  :release-adv {:exec-args {:profile "release-adv"}}
-  :static {:exec-args {:profile "static"}}
-  :ci {:exec-args {:profile "ci"}}
+  :demo {:exec-fn modular.system/start!
+         :exec-args {:profile "watch"
+                     :version "watch"
+                     :config ["demo-config.edn"]
+                     :services "demo-services.edn"}}
 
-  :run {:exec-fn modular.system/start!
-        :exec-args {:profile "jetty"
-                    :config  ["demo-config.edn"]
-                    :services "demo-services.edn"}}}
 ;  
- }
+  }}

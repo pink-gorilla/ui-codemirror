@@ -1,14 +1,15 @@
-{:name "ui-codemirror"
- ; build
- :lazy true
- :cljs-namespace [; for interactions with codemirror instance:
+{:extension/name :ui-codemirror
+ ; cljs-build
+ :cljs/module :ui-codemirror
+ :cljs/depends-on #{:main}
+ :cljs/namespace [; for interactions with codemirror instance:
                   ui.codemirror.api
                   ui.codemirror.theme
                   ui.codemirror.codemirror
                   ; for codemirror with reagent-atom bindings.
                   ui.codemirror.bound]
 
- :cljs-ns-bindings {'ui.codemirror.bound {'codemirror-atom ui.codemirror.bound/codemirror-atom
+ :cljs/ns-bindings {'ui.codemirror.bound {'codemirror-atom ui.codemirror.bound/codemirror-atom
                                           'codemirror-atom-viewonly ui.codemirror.bound/codemirror-atom-viewonly
                                           'codemirror-themed ui.codemirror.bound/codemirror-themed}
                     'ui.codemirror.api {'focus ui.codemirror.api/focus
@@ -21,6 +22,8 @@
                     'ui.codemirror.codemirror {'get-editor ui.codemirror.codemirror/get-editor
                                                'codemirror ui.codemirror.codemirror/codemirror}}
 
+ ; runtime
+ 
  :theme {:available {:codemirror {true ["codemirror/lib/codemirror.css"]
                                   "duotone-dark" ["codemirror/theme/duotone-dark.css"]
                                   "seti" ["codemirror/theme/seti.css"]
