@@ -2,6 +2,7 @@
   (:require
    [taoensso.timbre :refer-macros [debug debugf info infof warn error]]
    [reagent.core :as r]
+   [frontend.css :refer [theme-a]]
    ["codemirror" :as CodeMirror]
    ["codemirror/addon/edit/closebrackets"]
    ["codemirror/addon/edit/matchbrackets"]
@@ -84,4 +85,10 @@
             [:textarea {:ref #(reset! textarea-el %)}])))})))
 
 
-
+(defn codemirror-themed [id cm-opts]
+  (r/with-let [_ (ensure-initialized)]
+    (let [theme (or (get-in @theme-a [:current :codemirror])
+                    "mdn-like")
+          cm-opts-themed (merge cm-opts {:theme theme})]
+      [:div.my-codemirror
+       [codemirror id cm-opts-themed]])))

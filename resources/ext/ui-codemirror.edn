@@ -20,7 +20,9 @@
                     'ui.codemirror.theme {'style-inline ui.codemirror.theme/style-codemirror-inline
                                           'style-fullscreen ui.codemirror.theme/style-codemirror-fullscreen}
                     'ui.codemirror.codemirror {'get-editor ui.codemirror.codemirror/get-editor
-                                               'codemirror ui.codemirror.codemirror/codemirror}}
+                                               'codemirror ui.codemirror.codemirror/codemirror
+                                               'codemirror-themed ui.codemirror.codemirror/codemirror-themed
+                                               }}
 
  ; runtime
  
