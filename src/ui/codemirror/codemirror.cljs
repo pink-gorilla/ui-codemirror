@@ -90,5 +90,4 @@
     (let [theme (or (get-in @theme-a [:current :codemirror])
                     "mdn-like")
           cm-opts-themed (merge cm-opts {:theme theme})]
-      [:div.my-codemirror
-       [codemirror id cm-opts-themed]])))
+       [codemirror id cm-opts-themed])))
